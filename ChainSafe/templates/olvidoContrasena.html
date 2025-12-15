@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChainSecure - Recuperar Contraseña</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+    <div class="login-container" style="max-width: 600px;">
+        <!-- FORMULARIO CENTRADO -->
+        <div class="login-right" style="flex: none; width: 100%;">
+            <!-- Logo centrado -->
+            <div style="text-align: center; margin-bottom: 30px;">
+                <div class="logo" style="margin: 0 auto;">CS</div>
+            </div>
+
+            <div class="login-form-header" style="text-align: center;">
+                <h2>¿Olvidó su contraseña?</h2>
+                <p>Ingrese su correo electrónico y le enviaremos instrucciones para recuperar su contraseña</p>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div class="error-message" id="errorMessage">
+                Por favor ingrese un correo válido
+            </div>
+
+            <!-- Mensaje de éxito -->
+            <div class="success-message" id="successMessage">
+                Se ha enviado un correo con instrucciones para recuperar su contraseña
+            </div>
+
+            <!-- Formulario -->
+            <form id="recuperarForm" action="/recuperar_password" method="POST">
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <div class="input-wrapper">
+                        
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="correo@ejemplo.com"
+                            required
+                            autocomplete="email">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login">Enviar Instrucciones</button>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <a href="{{ url_for('inicio') }}" class="forgot-password"> ← Volver al inicio de sesión</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

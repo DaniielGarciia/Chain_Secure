@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<!--cabecera-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChainSecure</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<!--Cuerpo pagina web-->
+<body class="login-body">
+    
+    <div class="login-container">
+        <!-- LADO IZQUIERDO PARA LA INFORMACIÓN -->
+
+        <div class="login-left">
+            <div class="logo-container">
+                <div class="logo">CS</div>
+            </div>
+            
+            <h1>ChainSecure</h1>
+            <p>Sistema de Gestión de Control y Seguridad para implementación  de BASC</p>
+            
+            <div class="feature-list">
+                <div class="feature-item">Gestión documental automatizada</div>
+                <div class="feature-item">Control de versiones integrado</div>
+                <div class="feature-item">Listado maestro actualizado</div>
+                <div class="feature-item">Cumplimiento normativo BASC V.6</div>
+            </div>
+        </div> 
+
+        <!-- LADO DERECHO - FORMULARIO -->
+        <div class="login-right">
+            <div class="login-form-header">
+                <h2>Iniciar Sesión</h2>
+                <p>Ingrese sus datos para acceder al sistema</p>
+            </div>
+
+            <!-- Mensaje de error -->
+            <div class="error-message" id="errorMessage">
+                Usuario o contraseña incorrectos
+            </div>
+
+            <!-- Formulario para el login -->
+            
+            <form id="loginForm" action="/login" method="POST">
+                <div class="form-group">
+
+                    <label for="usuario">Usuario</label>
+                    <div class="input-wrapper">
+                        
+                        <input 
+                            type="text" 
+                            id="usuario" 
+                            name="usuario" 
+                            placeholder="Ingrese su usuario"
+                            required
+                            autocomplete="username">
+                    </div>
+                </div>
+                    <!-- contraseña --> 
+
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <div class="input-wrapper">
+                        
+                        
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Ingrese su contraseña"
+                            required
+                            autocomplete="current-password">
+                    </div>
+                </div>
+
+                <!-- opcion para recordar al usuario-->
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox" name="remember">
+                        Recordarme
+                    </label>
+
+
+                    <!-- Acceso a los layers -->
+
+                    <a href="{{ url_for('usuario_nuevo') }}">Crear usuario</a>
+                    <a href="{{ url_for('recuperar') }}">¿Olvidó su contraseña?</a>
+                   
+                </div>
+
+                <button type="submit" class="btn-login">Iniciar sesión</button>
+                <a href="{{ url_for('ofline') }}" class="btn-login">Iniciar seccion Ofline</a>
+            
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

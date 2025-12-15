@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construcción de Documentos - ChainSecure</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <style>
+        .documentos-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        .btn-nuevo-doc {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .btn-nuevo-doc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+        }
+        
+        .form-documento {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #48bb78;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn-guardar-doc {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        .btn-guardar-doc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+        }
+        
+        .alert {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert.success {
+            background: #c6f6d5;
+            color: #22543d;
+            display: block;
+        }
+        
+        .alert.error {
+            background: #fed7d7;
+            color: #c53030;
+            display: block;
+        }
+        
+        .documentos-recientes {
+            margin-top: 40px;
+        }
+        
+        .doc-card {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .doc-info h4 {
+            margin: 0 0 8px 0;
+            color: #2d3748;
+        }
+        
+        .doc-info p {
+            margin: 0;
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .doc-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .doc-badge.vigente {
+            background: #48bb7815;
+            color: #48bb78;
+        }
+        
+        .doc-badge.pendiente {
+            background: #ed8b0015;
+            color: #ed8b00;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo-section">
+            <div class="logo-small">CS</div>
+            <h1>ChainSecure</h1>
+        </div>
+        <div class="user-section">
+            <div class="user-info">
+                <div class="user-name" id="userName">Usuario</div>
+                <div class="user-role" id="userRole">Rol</div>
+            </div>
+            <div class="user-avatar" id="userAvatar">U</div>
+            <button onclick="cerrarSesion()" class="logout-btn">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="menu-section">
+                <div class="menu-title">Principal</div>
+                <a href="/dashboard" class="menu-item">
+                    <span class="menu-icon">🏠</span>
+                    Dashboard
+                </a>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-title">Gestión</div>
+                <a href="/gestion-usuarios" class="menu-item">
+                    <span class="menu-icon">👥</span>
+                    Usuarios
+                </a>
+                <a href="/construccion-documentos" class="menu-item active">
+                    <span class="menu-icon">📄</span>
+                    Documentos
+                </a>
+                <a href="/listado-maestro" class="menu-item">
+                    <span class="menu-icon">📋</span>
+                    Listado Maestro
+                </a>
+            </div>
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="content">
+            <div class="content-header">
+                <h2>Construcción de Documentos BASC</h2>
+                <div class="breadcrumb">Inicio / Gestión / Documentos</div>
+            </div>
+
+            <div class="documentos-container">
+                <div id="alertMsg" class="alert"></div>
+                
+                <form id="formDocumento" class="form-documento">
+                    <div class="form-group">
+                        <label>Proceso *</label>
+                        <select id="proceso" required>
+                            <option value="">Seleccione un proceso</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Código del Documento *</label>
+                        <input type="text" id="codigo" placeholder="Ej: GH-PR-001" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Nombre del Documento *</label>
+                        <input type="text" id="nombre" placeholder="Ej: Procedimiento de Selección de Personal" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Versión *</label>
+                        <input type="text" id="version" placeholder="Ej: 01" value="01" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Estado *</label>
+                        <select id="estado" required>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Vigente">Vigente</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn-guardar-doc">
+                        💾 Guardar Documento
+                    </button>
+                </form>
+                
+                <div class="documentos-recientes">
+                    <h3>Documentos Recientes</h3>
+                    <div id="listaRecientes">
+                        <p style="text-align: center; color: #718096;">Cargando documentos...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/construccion_documentos.js') }}"></script>
+</body>
+</html>

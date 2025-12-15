@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado Maestro - ChainSecure</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <style>
+        .listado-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 20px;
+        }
+        
+        .filtros-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .filtro-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        
+        .filtro-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn-exportar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .tabla-listado {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .tabla-listado th {
+            background: #f7fafc;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2d3748;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+        }
+        
+        .tabla-listado td {
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .tabla-listado tbody tr:hover {
+            background: #f7fafc;
+        }
+        
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge.vigente {
+            background: #48bb7815;
+            color: #48bb78;
+        }
+        
+        .badge.pendiente {
+            background: #ed8b0015;
+            color: #ed8b00;
+        }
+        
+        .badge.obsoleto {
+            background: #f5656515;
+            color: #f56565;
+        }
+        
+        .btn-accion {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 6px;
+            margin: 0 4px;
+            font-size: 18px;
+        }
+        
+        .btn-accion:hover {
+            background: #f7fafc;
+        }
+        
+        .sin-resultados {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+        
+        .sin-resultados-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        
+        .btn-guardar, .btn-cancelar {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        
+        .btn-guardar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-cancelar {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo-section">
+            <div class="logo-small">CS</div>
+            <h1>ChainSecure</h1>
+        </div>
+        <div class="user-section">
+            <div class="user-info">
+                <div class="user-name" id="userName">Usuario</div>
+                <div class="user-role" id="userRole">Rol</div>
+            </div>
+            <div class="user-avatar" id="userAvatar">U</div>
+            <button onclick="cerrarSesion()" class="logout-btn">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="menu-section">
+                <div class="menu-title">Principal</div>
+                <a href="/dashboard" class="menu-item">
+                    <span class="menu-icon">🏠</span>
+                    Dashboard
+                </a>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-title">Gestión</div>
+                <a href="/gestion-usuarios" class="menu-item">
+                    <span class="menu-icon">👥</span>
+                    Usuarios
+                </a>
+                <a href="/construccion-documentos" class="menu-item">
+                    <span class="menu-icon">📄</span>
+                    Documentos
+                </a>
+                <a href="/listado-maestro" class="menu-item active">
+                    <span class="menu-icon">📋</span>
+                    Listado Maestro
+                </a>
+            </div>
+        </div>
+
+        <!-- CONTENIDO -->
+        <div class="content">
+            <div class="content-header">
+                <h2>Listado Maestro de Documentos</h2>
+                <div class="breadcrumb">Inicio / Gestión / Listado Maestro</div>
+            </div>
+
+            <div class="listado-container">
+                <div class="filtros-container">
+                    <input type="text" id="buscarCodigo" class="filtro-input" 
+                           placeholder="🔍 Buscar por código...">
+                    <input type="text" id="buscarNombre" class="filtro-input" 
+                           placeholder="🔍 Buscar por nombre...">
+                    <select id="filtroEstado" class="filtro-input">
+                        <option value="">Todos los estados</option>
+                        <option value="Vigente">Vigente</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Obsoleto">Obsoleto</option>
+                    </select>
+                    <button class="btn-exportar" onclick="exportarExcel()">
+                        📊 Exportar a Excel
+                    </button>
+                </div>
+
+                <table class="tabla-listado">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre del Documento</th>
+                            <th>Versión</th>
+                            <th>Estado</th>
+                            <th>Fecha Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaListado">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 40px;">
+                                Cargando documentos...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR -->
+    <div class="modal" id="modalEditar">
+        <div class="modal-content">
+            <h2>Editar Documento</h2>
+            <form id="formEditar">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label>Código</label>
+                    <input type="text" id="editCodigo" required>
+                </div>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="editNombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Versión</label>
+                    <input type="text" id="editVersion" required>
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="editEstado" required>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Vigente">Vigente</option>
+                        <option value="Obsoleto">Obsoleto</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" class="btn-guardar">Guardar</button>
+                    <button type="button" class="btn-cancelar" onclick="cerrarModalEditar()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/listado_maestro.js') }}"></script>
+</body>
+</html>

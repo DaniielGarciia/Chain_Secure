@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu principal</title>
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+    
+</head>
+
+<body>
+    
+    <!-- ==================== Cuerpo ==================== -->
+    <div class="header">
+        <div class="logo-section">
+            <div class="logo-small">CS</div>
+            <h1>ChainSecure</h1>
+        </div>
+
+        <div class="user-section">
+            <div class="user-info">
+                <div class="user-name" id="userName">Administrador</div>
+                <div class="user-role" id="userRole">Admin</div>
+            </div>
+
+            <div class="user-avatar" id="userAvatar">A</div>
+            
+            <!-- Botón de cerrar sesión -->
+            <a href="{{ url_for('inicio') }}" class="logout-btn">Cerrar Sesión</a>
+        </div>
+    </div>
+
+
+    <div class="main-container">
+        <!-- ==================== SIDEBAR ==================== -->
+        <div class="sidebar">
+
+            <!-- Sección Principal -->
+             
+            <div class="menu-section">
+                <div class="menu-title">Principal</div>
+                <a href="{{ url_for('ofline') }}" class="menu-item active">
+                    <span class="menu-icon">🏠</span>
+                    Menu Principal
+                </a>
+            </div>
+
+            <!-- Sección Gestión -->
+            <div class="menu-section">
+                <div class="menu-title">Gestión</div>
+                <a href="{{ url_for('gestion_usuarios') }}" class="menu-item">
+                    <span class="menu-icon">👥</span>
+                    usuarios
+                </a>
+                <a href="{{ url_for('construccion_documentos') }}" class="menu-item">
+                    <span class="menu-icon">📄</span>
+                    Documentos
+                </a>
+                <a href="{{ url_for('listado_maestro') }}" class="menu-item">
+                    <span class="menu-icon">📋</span>
+                    Listado Maestro
+                </a>
+                <a href="html/procesos.html" class="menu-item">
+                    <span class="menu-icon">🏢</span>
+                    Procesos
+                </a>
+            </div>
+
+            <!-- Sección Configuración -->
+            <div class="menu-section">
+                <div class="menu-title">Configuración</div>
+                <a href="html/ajustes.html" class="menu-item">
+                    <span class="menu-icon">⚙️</span>
+                    Ajustes
+                </a>
+                <a href="html/reportes.html" class="menu-item">
+                    <span class="menu-icon">📊</span>
+                    Reportes
+                </a>
+            </div>
+        </div>
+
+        <!-- ==================== CONTENT ==================== -->
+        <div class="content">
+            <!-- Header del contenido -->
+            <div class="content-header">
+                <h2>Dashboard</h2>
+                <div class="breadcrumb">Inicio / Dashboard</div>
+            </div>
+
+            <!-- ==================== TARJETAS DE ESTADÍSTICAS ==================== -->
+            <div class="cards-grid">
+                <!-- Total Documentos -->
+                <div class="stat-card" onclick="irADocumentos()">
+                    <div class="stat-header">
+                        <span class="stat-title">Total Documentos</span>
+                        <div class="stat-icon purple">📄</div>
+                    </div>
+                    <div class="stat-value" id="totalDocumentos">0</div>
+                    <div class="stat-change">Sistema iniciado</div>
+                </div>
+
+                <!-- Documentos Vigentes -->
+                <div class="stat-card" onclick="irADocumentos()">
+                    <div class="stat-header">
+                        <span class="stat-title">Documentos Vigentes</span>
+                        <div class="stat-icon green">✓</div>
+                    </div>
+                    <div class="stat-value" id="documentosVigentes">0</div>
+                    <div class="stat-change">Listos para uso</div>
+                </div>
+
+                <!-- Pendientes -->
+                <div class="stat-card" onclick="irADocumentos()">
+                    <div class="stat-header">
+                        <span class="stat-title">Pendientes Revisión</span>
+                        <div class="stat-icon orange">⏳</div>
+                    </div>
+                    <div class="stat-value" id="documentosPendientes">0</div>
+                    <div class="stat-change">En revisión</div>
+                </div>
+
+                <!-- Usuarios Activos -->
+                <div class="stat-card" onclick="irAUsuarios()">
+                    <div class="stat-header">
+                        <span class="stat-title">Usuarios Activos</span>
+                        <div class="stat-icon red">👤</div>
+                    </div>
+                    <div class="stat-value" id="usuariosActivos">1</div>
+                    <div class="stat-change">Administrador</div>
+                </div>
+            </div>
+
+            <!-- ==================== MÓDULOS DEL SISTEMA ==================== -->
+            <div class="content-header">
+                <h2>Módulos del Sistema</h2>
+            </div>
+
+            <div class="module-grid">
+                <!-- Módulo Gestión de Usuarios -->
+                <a href="html/gestion_usuarios.html" class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon blue">👥</div>
+                        <div class="module-title">Gestión de Usuarios</div>
+                    </div>
+                    <div class="module-description">
+                        Administre usuarios del sistema, asigne roles y perfiles según las necesidades organizacionales. Control completo de accesos y permisos.
+                    </div>
+                    <span class="module-badge">RQF001</span>
+                </a>
+
+                <!-- Módulo Construcción de Documentos -->
+                <a href="html/gestion_documentos.html" class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon green">📄</div>
+                        <div class="module-title">Construcción de Documentos</div>
+                    </div>
+                    <div class="module-description">
+                        Cree documentos usando plantillas BASC predefinidas con validación automática de requisitos. Control de versiones integrado.
+                    </div>
+                    <span class="module-badge">RQF002</span>
+                </a>
+
+                <!-- Módulo Listado Maestro -->
+                <a href="html/listado_maestro.html" class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon blue">📋</div>
+                        <div class="module-title">Listado Maestro</div>
+                    </div>
+                    <div class="module-description">
+                        Consulte el listado maestro consolidado de todos los documentos del SGCS con control de versiones. Exportable a PDF y Excel.
+                    </div>
+                    <span class="module-badge">RQF003</span>
+                </a>
+
+                <!-- Módulo Procesos -->
+                <a href="html/procesos.html" class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon green">🏢</div>
+                        <div class="module-title">Gestión de Procesos</div>
+                    </div>
+                    <div class="module-description">
+                        Administre los procesos organizacionales según la estructura BASC. Relacione documentos y requisitos normativos.
+                    </div>
+                    <span class="module-badge">Procesos</span>
+                </a>
+
+                <!-- Módulo Reportes -->
+                <a href="html/reportes.html" class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon blue">📊</div>
+                        <div class="module-title">Reportes y Análisis</div>
+                    </div>
+                    <div class="module-description">
+                        Genere reportes de cumplimiento, estadísticas de documentación y análisis de gestión del SGCS. Exportables en múltiples formatos.
+                    </div>
+                    <span class="module-badge">Reportes</span>
+                </a>
+
+                <!-- Módulo Ajustes -->
+                <a href="html/ajustes.html" class="module-card">
+                    <div class="module-header">
+                        <div class="module-icon green">⚙️</div>
+                        <div class="module-title">Configuración</div>
+                    </div>
+                    <div class="module-description">
+                        Configure los parámetros generales del sistema, personalice plantillas y administre la información de la empresa.
+                    </div>
+                    <span class="module-badge">Config</span>
+                </a>
+            </div>
+
+            <!-- ==================== SECCIÓN DE ALERTAS ==================== -->
+            <div class="content-header" style="margin-top: 40px;">
+                <h2>Alertas y Notificaciones</h2>
+            </div>
+
+            <div class="alerts-container">
+                <div class="alert-card info">
+                    <div class="alert-icon">ℹ️</div>
+                    <div class="alert-content">
+                        <h3>Sistema Iniciado</h3>
+                        <p>Bienvenido a ChainSecure. Configure su empresa y comience a crear documentos BASC.</p>
+                    </div>
+                </div>
+
+                <div class="alert-card warning" style="display: none;" id="alertDocumentos">
+                    <div class="alert-icon">⚠️</div>
+                    <div class="alert-content">
+                        <h3>Documentos por Vencer</h3>
+                        <p>Tiene <span id="docsVencer">0</span> documentos que requieren actualización este mes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // ==================== VERIFICAR SESIÓN ====================
+        window.addEventListener('load', function() {
+            
+            
+            fetch('/api/verificar_sesion')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.autenticado) {
+                        window.location.href = 'index.html';
+                    } else {
+                        // Actualizar información del usuario
+                        document.getElementById('userName').textContent = data.nombre;
+                        document.getElementById('userRole').textContent = data.rol;
+                        document.getElementById('userAvatar').textContent = data.nombre.charAt(0).toUpperCase();
+                        
+                        // Cargar estadísticas
+                        cargarEstadisticas();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    window.location.href = 'index.html';
+                });
+        
+
+            // TEMPORAL: Simular carga
+            console.log('Dashboard cargado correctamente');
+            cargarEstadisticas();
+        });
+
+        // ==================== CARGAR ESTADÍSTICAS ====================
+        function cargarEstadisticas() {
+            
+            fetch('/api/estadisticas')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('totalDocumentos').textContent = data.total_documentos || 0;
+                    document.getElementById('documentosVigentes').textContent = data.documentos_vigentes || 0;
+                    document.getElementById('documentosPendientes').textContent = data.documentos_pendientes || 0;
+                    document.getElementById('usuariosActivos').textContent = data.usuarios_activos || 1;
+                    
+                    // Mostrar alerta si hay documentos por vencer
+                    if (data.documentos_por_vencer > 0) {
+                        document.getElementById('docsVencer').textContent = data.documentos_por_vencer;
+                        document.getElementById('alertDocumentos').style.display = 'flex';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar estadísticas:', error);
+                });
+            
+            
+            // TEMPORAL: Datos de ejemplo (eliminar cuando conectes con Python)
+            document.getElementById('totalDocumentos').textContent = '0';
+            document.getElementById('documentosVigentes').textContent = '0';
+            document.getElementById('documentosPendientes').textContent = '0';
+            document.getElementById('usuariosActivos').textContent = '1';
+        }
+
+        // ==================== FUNCIÓN LOGOUT ====================
+        function logout() {
+            if (confirm('¿Está seguro que desea cerrar sesión?')) {
+                // CUANDO CONECTES CON PYTHON, USA ESTO:
+                
+                fetch('/api/logout', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = 'index.html';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cerrar sesión:', error);
+                    window.location.href = 'index.html';
+                });
+                
+                
+                // TEMPORAL: Redirección directa
+                window.location.href = 'index.html';
+            }
+        }
+
+        // ==================== NAVEGACIÓN RÁPIDA ====================
+        function irADocumentos() {
+            window.location.href = 'html/listado_maestro.html';
+        }
+
+        function irAUsuarios() {
+            window.location.href = 'html/gestion_usuarios.html';
+        }
+
+        // ==================== NAVEGACIÓN DEL MENÚ ====================
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Si el item tiene href válido, dejar que navegue
+                const href = this.getAttribute('href');
+                if (href && href !== '#' && href !== 'javascript:void(0)') {
+                    return; // Permitir navegación normal
+                }
+                
+                // Si no, prevenir y marcar como activo
+                e.preventDefault();
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ==================== ACTUALIZAR HORA ====================
+        function actualizarHora() {
+            const ahora = new Date();
+            const opciones = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            console.log('Última actualización:', ahora.toLocaleDateString('es-ES', opciones));
+        }
+
+        // Actualizar cada minuto
+        setInterval(actualizarHora, 60000);
+        actualizarHora();
+    </script>
+</body>
+</html>
